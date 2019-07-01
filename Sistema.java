@@ -5,26 +5,8 @@ import java.util.Scanner;
 
 public class Sistema {
 	static Scanner entrada = new Scanner(System.in);
-	
-	Scanner usuarios = new Scanner("catalogoUsuarios.txt");
-	
-	while(usuarios.hasnext()) {
-		Usuario.setNome(usuarios.nextLine());
-		Usuario.setEmail(usuarios.nextLine());
-		Usuario.setEndereco(usuarios.nextLine());
-		Usuario.setSenha(usuarios.nextLine());
-		// Usuario.usuarios.add(); fiquei na dúvida aqui se tem que adicionar
-		// à lista ou se isso já monta a lista
-		
-		// Fiquei com dúvida também no Usuario.setEndereco(usuarios.nextLine()),
-		// porque endereço se desdobra em vários campos
-		// e no arquivo tá um embaixo do outro
-		// logradouro
-		// numero
-		// etc
-	}
 
-	static ArrayList<Biblioteca> bibliotecas = new ArrayList<Biblioteca>();// arquivo com todas as bibs
+	static ArrayList<Biblioteca> bibliotecas = new ArrayList<Biblioteca>();
 
 	public static void menu() {
 		System.out.println("Bem vindo ao BookSmart! Selecione uma opcao:");
@@ -39,17 +21,18 @@ public class Sistema {
 			cadastrarUsuario();
 		case 2:
 			cadastrarUsuario();
-		case 3: // quero criar um ambiente de biblioteca assim como tem o dos usuarios
+		case 3:
+			entrar();
 		}
 	}
 
 	public static void cadastrarUsuario() {
 		System.out.println("Digite o nome: ");
 		String nome = entrada.nextLine();
+		entrada.nextLine();
 		System.out.println("Digite seu endereco:");
 		System.out.println("Logadouro: ");
 		String logadouro = entrada.nextLine();
-		entrada.nextLine();
 		System.out.println("Numero: ");
 		int numero = entrada.nextInt();
 		System.out.println("Complemento: ");
@@ -94,6 +77,7 @@ public class Sistema {
 	public static void entrar() {
 		System.out.println("Digite seu email:");
 		String email = entrada.nextLine();
+		entrada.nextLine();
 		System.out.println("Digite sua senha");
 		String senha = entrada.nextLine();
 		for (Usuario user : Usuario.usuarios) {
@@ -114,9 +98,10 @@ public class Sistema {
 		}
 	}
 
+
 	public static void ambienteUser(Usuario usuario) {
 
-		System.out.println("Ola! O que deseja fazer?");
+		System.out.println("Ola " + usuario.getNome() + "! O que deseja fazer?");
 		System.out.println("1) Doar livro");
 		System.out.println("2) Tornar-se um entregador");
 		int opcaoComum = entrada.nextInt();
@@ -130,35 +115,54 @@ public class Sistema {
 	}
 
 	public static void ambienteUser(Entregador entregador) {
-		System.out.println("Ola! O que deseja fazer?");
+		System.out.println("Ola " + entregador.getNome() + "! O que deseja fazer?");
 		System.out.println("1) Doar livro");
 		System.out.println("2) Realizar entrega");
 		int opcaoEntregador = entrada.nextInt();
 		switch (opcaoEntregador) {
 		case 1:
+			System.out.println("Digite o nome do livro");
+			String titulo = entrada.nextLine();
+			System.out.println("Digite o autor do livro");
+			String autor = entrada.nextLine();
+			new Doacao(entregador, new Livro(titulo, autor));
 		case 2:
 			System.out.println("Aqui estao suas entregas pendentes:");
 			System.out.println(entregador.entregasPendentes.toString());
 		}
 	}
-	
+
 	public static void ambienteUser(Biblioteca biblioteca) {
 		System.out.println("Ola! O que deseja fazer?");
 		System.out.println("1) Pedir livro");
 		System.out.println("2) Confirmar o recebimento de um livro");
 		int opcaoBiblioteca = entrada.nextInt();
-		switch(opcaoBiblioteca) {
-		case 1: System.out.println("Digite o titulo do livro: ");
-		String titulo = entrada.nextLine();
-		System.out.println("Digite o autor do livro: ");
-		String autor = entrada.nextLine();
-			new Pedido(biblioteca, new Livro(titulo, autor)); 
-		case 2: biblioteca.selecionarLivrosPedidos();
-		System.out.println("Livro recebido com sucesso!");
+		switch (opcaoBiblioteca) {
+		case 1:
+			System.out.println("Digite o titulo do livro: ");
+			String titulo = entrada.nextLine();
+			System.out.println("Digite o autor do livro: ");
+			String autor = entrada.nextLine();
+			new Pedido(biblioteca, new Livro(titulo, autor));
+		case 2:
+			biblioteca.selecionarLivrosPedidos();
+			System.out.println("Livro recebido com sucesso!");
 		}
 	}
 
 	public static void main(String[] args) {
+		new Usuario("Laryssa Azevedo", new Endereco("Rua General Roca", 350, "apto 301", "Tijuca", "Rio de Janeiro"),
+				"laryssa.azevedo@uniriotec.br", "123456");
+		new Usuario("Eduardo", new Endereco("Rua Voluntarios da Patria", 12, "s/n", "Botafogo", "Rio de Janeiro"),
+				"eduardo.coelho@uniriotec.br", "123456");
+		new Usuario("Luiza Agostinho", new Endereco("Avenida Pasteur", 100, "apto 1010", "Urca", "Rio de Janeiro"),
+				"luiza.agostinho@uniriotec.br", "123456");
+		new Usuario("Maria Silva",
+				new Endereco("Rua Marques de Sao Vicente", 925, "apto 904", "Gavea", "Rio de Janeiro"),
+				"maria.silva@uniriotec.br", "123456");
+		new Usuario("Julio Sousa", new Endereco("Rua Quito", 10, "casa", "Penha", "Rio de Janeiro"),
+				"julio.sousa@uniriotec.br", "123456");
+
 		menu();
 	}
 
